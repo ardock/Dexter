@@ -15,5 +15,5 @@ before_script:
  - adb shell input keyevent 82 &
 
 script:
-  - ./gradlew checkstyle build -debug
+  - ./gradlew checkstyle build -info
   - ./uitests.sh
