@@ -34,27 +34,35 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 @RunWith(AndroidJUnit4.class)
 public class SampleActivityTest {
 
+  private UiDevice device;
+
   @Rule
   public ActivityTestRule<SampleActivity> mActivityRule =
       new ActivityTestRule<>(SampleActivity.class);
 
   @Before public void setUp() throws Exception {
-
+    device = UiDevice.getInstance(getInstrumentation());
   }
 
   @Test
-  public void onGrantCameraPermissionThenFeedbackTextShowsGranted() throws Exception {
-    onView(withId(R.id.camera_permission_button)).perform(click());
-    UiDevice device = UiDevice.getInstance(getInstrumentation());
+  public void onGrantCameraPermissionThenFeedbackTextShowsItsGranted() throws Exception {
+    whenCameraButtonIsClicked();
+
     device.findObject(new UiSelector().text("Allow")).click();
   }
 
   @Test
   public void buttonShouldUpdateTextNope() throws UiObjectNotFoundException {
-    onView(withId(R.id.camera_permission_button)).perform(click());
-    UiDevice device = UiDevice.getInstance(getInstrumentation());
+    whenCameraButtonIsClicked();
+
     device.findObject(new UiSelector().text("Deny")).click();
   }
 
-  
+  private void whenCameraButtonIsClicked() {
+    onView(withId(R.id.camera_permission_button)).perform(click());
+  }
+
+  private void thenCameraPermissionIsGranted() throws Exception {
+    device.findObject(new UiSelector().text("Allow")).click();
+  }
 }
