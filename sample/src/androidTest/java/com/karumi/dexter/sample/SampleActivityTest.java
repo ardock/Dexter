@@ -18,10 +18,7 @@ package com.karumi.dexter.sample;
 
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.support.test.uiautomator.By;
 import android.support.test.uiautomator.UiDevice;
-import android.support.test.uiautomator.UiObject;
-import android.support.test.uiautomator.UiObject2;
 import android.support.test.uiautomator.UiObjectNotFoundException;
 import android.support.test.uiautomator.UiSelector;
 import java.io.IOException;
@@ -43,23 +40,12 @@ public class SampleActivityTest {
       new ActivityTestRule<>(SampleActivity.class);
 
   @Before public void setUp() throws Exception {
-    UiDevice device = UiDevice.getInstance(getInstrumentation());
-    device.findObject(new UiSelector().text("Settings")).click();
-    device.findObject(new UiSelector().text("Permissions")).click();
-    for (UiObject2 switchButton : device.findObjects(By.clazz("android.widget.Switch"))) {
-      if (!switchButton.isChecked()) {
-        switchButton.click();
-      }
-      switchButton.click();
-    }
-    device.pressBack();
-    device.pressBack();
+
   }
 
   @Test
   public void buttonShouldUpdateText() throws UiObjectNotFoundException, IOException {
     onView(withId(R.id.camera_permission_button)).perform(click());
-    UiDevice.getInstance(getInstrumentation()).executeShellCommand("adb shell revoke com.karumi.dexter.sample android.permission.CAMERA");
     UiDevice device = UiDevice.getInstance(getInstrumentation());
     device.findObject(new UiSelector().text("Allow")).click();
   }
@@ -68,7 +54,6 @@ public class SampleActivityTest {
   public void buttonShouldUpdateTextNope() throws UiObjectNotFoundException {
     onView(withId(R.id.camera_permission_button)).perform(click());
     UiDevice device = UiDevice.getInstance(getInstrumentation());
-    UiObject object = device.findObject(new UiSelector().text("Deny"));
-    object.click();
+    device.findObject(new UiSelector().text("Deny")).click();
   }
 }
