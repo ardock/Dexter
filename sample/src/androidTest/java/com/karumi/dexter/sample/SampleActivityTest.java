@@ -16,10 +16,10 @@
 
 package com.karumi.dexter.sample;
 
+import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.UiDevice;
-import android.support.test.uiautomator.UiObjectNotFoundException;
 import android.support.test.uiautomator.UiSelector;
 import org.junit.Before;
 import org.junit.Rule;
@@ -29,6 +29,7 @@ import org.junit.runner.RunWith;
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 
 @RunWith(AndroidJUnit4.class)
@@ -37,7 +38,7 @@ public class SampleActivityTest {
   private UiDevice device;
 
   @Rule
-  public ActivityTestRule<SampleActivity> mActivityRule =
+  public ActivityTestRule<SampleActivity> activityRule =
       new ActivityTestRule<>(SampleActivity.class);
 
   @Before public void setUp() throws Exception {
@@ -47,22 +48,38 @@ public class SampleActivityTest {
   @Test
   public void onGrantCameraPermissionThenFeedbackTextShowsItsGranted() throws Exception {
     whenCameraButtonIsClicked();
+    whenCameraPermissionIsGranted();
 
-    device.findObject(new UiSelector().text("Allow")).click();
+    thenCameraFeedbackShowsPermissionGranted();
   }
 
   @Test
-  public void buttonShouldUpdateTextNope() throws UiObjectNotFoundException {
+  public void onDenyCameraPermissionThenFeedbackTextShowsItsDenied() throws Exception {
     whenCameraButtonIsClicked();
+    whenCameraPermissionIsDenied();
 
-    device.findObject(new UiSelector().text("Deny")).click();
+    thenCameraFeedbackShowsPermissionDenied();
   }
 
   private void whenCameraButtonIsClicked() {
     onView(withId(R.id.camera_permission_button)).perform(click());
   }
 
-  private void thenCameraPermissionIsGranted() throws Exception {
+  private void whenCameraPermissionIsGranted() throws Exception {
     device.findObject(new UiSelector().text("Allow")).click();
+  }
+
+  private void whenCameraPermissionIsDenied() throws Exception {
+    device.findObject(new UiSelector().text("Deny")).click();
+  }
+
+  private void thenCameraFeedbackShowsPermissionGranted() {
+    onView(withId(R.id.camera_permission_feedback))
+        .check(matches(ViewMatchers.withText(R.string.permission_granted_feedback)));
+  }
+
+  private void thenCameraFeedbackShowsPermissionDenied() {
+    onView(withId(R.id.camera_permission_feedback))
+        .check(matches(ViewMatchers.withText(R.string.permission_denied_feedback)));
   }
 }
