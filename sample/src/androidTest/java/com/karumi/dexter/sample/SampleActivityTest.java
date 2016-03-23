@@ -21,7 +21,6 @@ import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObjectNotFoundException;
 import android.support.test.uiautomator.UiSelector;
-import java.io.IOException;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -44,7 +43,7 @@ public class SampleActivityTest {
   }
 
   @Test
-  public void buttonShouldUpdateText() throws UiObjectNotFoundException, IOException {
+  public void onGrantCameraPermissionThenFeedbackTextShowsGranted() throws Exception {
     onView(withId(R.id.camera_permission_button)).perform(click());
     UiDevice device = UiDevice.getInstance(getInstrumentation());
     device.findObject(new UiSelector().text("Allow")).click();
@@ -56,4 +55,6 @@ public class SampleActivityTest {
     UiDevice device = UiDevice.getInstance(getInstrumentation());
     device.findObject(new UiSelector().text("Deny")).click();
   }
+
+  
 }

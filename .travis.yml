@@ -9,5 +9,5 @@ android:
     - extra-android-m2repository
 
 script:
-  ./gradlew checkstyle build
-  ./uitests.sh
+  - ./gradlew checkstyle build
+  - ./uitests.sh
